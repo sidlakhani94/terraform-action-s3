@@ -55,17 +55,17 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.mys3-bucket.id
   policy = <<EOF
 {
-  "Id": "Policy1687949160375",
+  "Id": "Policy1687949727949",
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Stmt1687949158063",
+      "Sid": "Stmt1687949725493",
       "Action": [
-        "s3:GetObject"
-		    "s3:GetObjectVersion"
+        "s3:GetObject",
+        "s3:GetObjectVersion"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.mys3-bucket.arn}/*",
+      "Resource": "${aws_s3_bucket.pixibytez-bucket.arn}/*",
       "Principal": "*"
     }
   ]
