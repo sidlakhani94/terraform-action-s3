@@ -12,9 +12,9 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    env: 
-        TF_REGION: ${{ secrets.TF_REGION }}
-        AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}    
+    # env: 
+    #     TF_REGION: ${{ secrets.TF_REGION }}
+    #     AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}    
 #     environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
