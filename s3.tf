@@ -62,7 +62,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
       "Sid": "Stmt1687949158063",
       "Action": [
         "s3:GetObject"
-		"s3:GetObjectVersion"
+		    "s3:GetObjectVersion"
       ],
       "Effect": "Allow",
       "Resource": "${aws_s3_bucket.mys3-bucket.arn}/*",
