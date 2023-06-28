@@ -55,25 +55,20 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.mys3-bucket.id
   policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Id": "Policy1683802700762",
-    "Statement": [
-        {
-            "Sid": "Stmt1683802694570",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": [
-                "s3:GetObject",
-                "s3:GetObjectVersion"
-            ],
-            "Resource": "${aws_s3_bucket.mys3-bucket.arn}/*",
-            "Condition": {
-                "StringLike": {
-                    "aws:Referer": "Admin@123"
-                }
-            }
-        }
-    ]
+  "Id": "Policy1687949160375",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1687949158063",
+      "Action": [
+        "s3:GetObject"
+		"s3:GetObjectVersion"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_s3_bucket.mys3-bucket.arn}/*",
+      "Principal": "*"
+    }
+  ]
 }
 EOF
 }
