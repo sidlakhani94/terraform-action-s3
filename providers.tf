@@ -18,5 +18,5 @@ terraform {
 provider "aws" {
   region = var.aws_region
   # shared_credentials_files = ["/home/sid/.aws/credentials"]
-  profile = "sid-pixiebytez"
+  # profile = "sid-pixiebytez"
 }
