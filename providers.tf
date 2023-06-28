@@ -8,15 +8,15 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "terraform-remote-state-ec2"
-    key    = "dev/projectv1-vpc/terraform.tfstate"
-    region = "us-east-1"
+    bucket  = "terraform-remote-state-ec2"
+    key     = "dev/projectv1-vpc/terraform.tfstate"
+    region  = "us-east-1"
     profile = "sid-pixiebytez"
   }
 }
 
 provider "aws" {
-  region     = var.aws_region
+  region = var.aws_region
   # shared_credentials_files = ["/home/sid/.aws/credentials"]
-  profile                  = "sid-pixiebytez"
+  profile = "sid-pixiebytez"
 }
