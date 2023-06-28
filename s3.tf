@@ -65,7 +65,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
         "s3:GetObjectVersion"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.pixibytez-bucket.arn}/*",
+      "Resource": "${aws_s3_bucket.mys3-bucket.arn}/*",
       "Principal": "*"
     }
   ]
