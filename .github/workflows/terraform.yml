@@ -12,6 +12,9 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    env: 
+        TF_REGION: ${{ secrets.TF_REGION }}
+        AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}    
 #     environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -36,10 +39,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
          
-      - name: Set Terraform variables
-        env: 
-          TF_REGION: ${{ secrets.TF_REGION }}
-          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+#       - name: Set Terraform variables
+
 #         run: |
 #             echo "region=${{ secrets.TF_REGION }}" >> $GITHUB_ENV
 #             echo "bucket_name=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_EN
