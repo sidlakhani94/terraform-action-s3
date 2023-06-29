@@ -36,25 +36,64 @@ jobs:
       - name: Terraform Format
         run: terraform fmt
 
-    - name: Terraform plan
-      run: |
-        terraform init
-        terraform plan -out=tfplan
-    #     terraform show -json tfplan > plan.json
+name: 'Terraform Deployment'
 
-    # - name: Display plan
-    #   run: |
-    #     cat plan.json
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+env: 
+    ROOT_PATH: '${{github.workspace}}'
 
-    - name: Request Approval
-      id: request_approval
-      run: echo "Please review and approve the Terraform plan."
+permissions:
+  contents: read
 
-    - name: Wait for Approval
-      id: wait_approval
-      uses: tekn0ir/wait-for-approval-action@v2
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
 
-    - name: Terraform apply
-      if: steps.wait_approval.outputs.approved == 'true'
-      run: |
-        terraform apply -auto-approve tfplan
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt
+
+      - name: Terraform plan
+        run: |
+          terraform init
+          terraform plan -out=tfplan
+      #     terraform show -json tfplan > plan.json
+  
+      # - name: Display plan
+      #   run: |
+      #     cat plan.json
+  
+      - name: Request Approval
+        id: request_approval
+        run: echo "Please review and approve the Terraform plan."
+  
+      - name: Wait for Approval
+        id: wait_approval
+        uses: tekn0ir/wait-for-approval-action@v2
+  
+      - name: Terraform apply
+        if: steps.wait_approval.outputs.approved == 'true'
+        run: |
+          terraform apply -auto-approve tfplan
+
