@@ -36,23 +36,25 @@ jobs:
       - name: Terraform Format
         run: terraform fmt
 
-      - name: Terraform plan
-        run: |
-          terraform init
-          terraform plan -out=tfplan
-      #     terraform show -json tfplan > plan.json
+    - name: Terraform plan
+      run: |
+        terraform init
+        terraform plan -out=tfplan
+    #     terraform show -json tfplan > plan.json
 
-      # - name: Display plan
-      #   run: |
-      #     cat plan.json
-  
-      - name: Review and Approve
-        id: approval
-        uses: "hieuhlc/github-approval@v1.0"
-        with:
-          context: "Please review and approve the Terraform plan."
-  
-      - name: Terraform apply
-        if: steps.approval.outputs.approved == 'true'
-        run: |
-          terraform apply -auto-approve tfplan
+    # - name: Display plan
+    #   run: |
+    #     cat plan.json
+
+    - name: Request Approval
+      id: request_approval
+      run: echo "Please review and approve the Terraform plan."
+
+    - name: Wait for Approval
+      id: wait_approval
+      uses: tekn0ir/wait-for-approval-action@v2
+
+    - name: Terraform apply
+      if: steps.wait_approval.outputs.approved == 'true'
+      run: |
+        terraform apply -auto-approve tfplan
