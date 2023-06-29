@@ -12,63 +12,43 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    # env: 
-    #     TF_REGION: ${{ secrets.TF_REGION }}
-    #     AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}    
-#     environment: production
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v3
-  
-      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-#       - name: Setup Terraform
-#         uses: hashicorp/setup-terraform@v1
-#         with:
-#           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-         
-#       - name: Set Terraform variables
 
-#         run: |
-#             echo "region=${{ secrets.TF_REGION }}" >> $GITHUB_ENV
-#             echo "bucket_name=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_EN
-  
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         run: terraform init
-  
-      # Checks that all Terraform configuration files adhere to a canonical format
+
       - name: Terraform Format
         run: terraform fmt
-  
+
       - name: Terraform Plan
         id: plan
         run: terraform plan -out=my_plan
-    
+
       - name: Save plan contents to environment file
         id: save_plan_contents
-        run: |
-          echo "PLAN_CONTENTS=$(cat my_plan)" >> $GITHUB_ENV
-    
+        run: echo "PLAN_CONTENTS=$(cat my_plan)" >> $GITHUB_ENV
+
       - name: Submit plan for approval
         uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
         id: submit_plan
         with:
           command: submit
           plan_contents: ${{ env.PLAN_CONTENTS }}
-    
+
       - name: Wait for approval
         uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
         id: wait_for_approval
@@ -76,7 +56,6 @@ jobs:
           command: wait
           plan_id: ${{ steps.submit_plan.outputs.plan_id }}
           timeout_seconds: 600
-    
+
       - name: Terraform Apply
         run: terraform apply -auto-approve my_plan
-
