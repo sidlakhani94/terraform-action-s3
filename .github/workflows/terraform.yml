@@ -55,7 +55,7 @@ jobs:
   
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out saved_plan
+        run: terraform plan -out=my_plan
 
       - name: Submit plan for approval
         uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
@@ -64,14 +64,13 @@ jobs:
           command: submit
           plan_contents: ${{steps.plan.outputs.stdout}}
 
-    # Snip: send a Slack DM asking somebody to visit `steps.submit_plan.outputs.approval_prompt_url` to approve
-
       - name: Wait for approval
         uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
+        id: wait_for_approval
         with:
           command: wait
           plan_id: ${{steps.submit_plan.outputs.plan_id}}
           timeout_seconds: 600
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve saved_plan
+        run: terraform apply -auto-approve my_plan
